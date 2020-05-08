@@ -49,10 +49,6 @@ def oauth_view(request):
 
 @csrf_exempt
 def post_dlfp(request):
-    import pprint
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(request.POST)
-
     user_uuid = request.COOKIES['uuid']
     oauth = OAuth(update_token=_update_token)
     oauth.register(name='dlfp')
