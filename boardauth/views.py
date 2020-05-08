@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from authlib.integrations.django_client import OAuth
+import requests
 
 from .models import OAuth2Token
 
@@ -61,6 +62,19 @@ def post_dlfp(request):
     resp = dlfp.post('board', json={'message': message}, token=token.to_token())
 
     return HttpResponse(resp)
+
+
+@csrf_exempt
+def post_euromussels(request):
+    """ Post on euromussels with cookie in DB """
+    user_uuid = request.COOKIES['uuid']
+    token = OAuth2Token.objects.filter(uuid=user_uuid).first()
+    eurologin = token.eurologin
+    req = requests.post(
+        'https://faab.euromussels.eu/add.php',
+        cookies={'faab_id': eurologin.cookie},
+        data=request.POST)
+    return HttpResponse(req)
 
 
 def _update_token(name, token, refresh_token=None, access_token=None):

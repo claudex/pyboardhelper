@@ -25,3 +25,10 @@ class OAuth2Token(models.Model):
             expires_at=self.expires_at,
         )
 
+
+class EuroLogin(models.Model):
+    """ Credentials for euromussels """
+    username = models.CharField(max_length=64)
+    password = models.CharField(max_length=64)
+    cookie = models.CharField(max_length=64)
+    oauth_token = models.OneToOneField(OAuth2Token, on_delete=models.CASCADE)
